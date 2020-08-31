@@ -1,6 +1,6 @@
 # Python-App-Posture-Reminder
 
-This is a Windows App I built with Python and the Tkinter GUI library. The purpose of this app is to remind the user to correct their posture while sitting in front of the computer. 
+This is an App I built with Python and the Tkinter GUI library. The purpose of this app is to remind the user to correct their posture while sitting in front of the computer. 
 
 The app was built with PyInstaller. 
 
