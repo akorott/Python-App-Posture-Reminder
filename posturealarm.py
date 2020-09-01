@@ -1,26 +1,12 @@
-# Alarm clock that rings every hour to remind me to keep my back straight
-'''
-How will it work?
-- A small icon pops up from the bottom right corner of the screen.
-- The message should only pop up if the screen is on.
-- Window should be about 8cm by 8cm
-- The window will contain some sort of message - something like "Reminder! Check your posture!" and will contain a funny animation
-of someone with bad posture and someone with good posture.
-- There should be an acknowledge button which will 'snooze' the reminder for a specific amount of time.
-'''
-
 from tkinter import *
 from tkinter import ttk
 import winsound
-from datetime import datetime, timedelta
 
 HEIGHT = 300
 WIDTH = 300
 
 root = Tk()
-
-canvas = Canvas(root, height=HEIGHT, width=WIDTH)
-canvas.pack()
+root.geometry(f"{HEIGHT}x{WIDTH}")
 
 # Added window title
 root.title('Posture Check Reminder')
@@ -37,52 +23,27 @@ Label(root, text="Remind me in", fg="black", relief="solid", font=("Helevetica",
 # Added window icon
 Tk.iconbitmap(root, default='meerkat.ico')
 
+def on_alarm():
+    winsound.PlaySound('ding-sound-effect_2.wav', winsound.SND_ASYNC)
+    root.wm_state('normal')
+
 # Function to minimize/maximize app after a specific amount of time
 def sleepfunc(option):
-
-
-    seconds_dictionary_boundary_1 = {
-        '1': datetime.now() + timedelta(seconds=60),
-        '2': datetime.now() + timedelta(seconds=1800),
-        '3': datetime.now() + timedelta(seconds=3600),
-        '4': datetime.now() + timedelta(seconds=7200)
-    }
-    seconds_dictionary_boundary_2 = {
-        '1': datetime.now() + timedelta(seconds=62),
-        '2': datetime.now() + timedelta(seconds=1803),
-        '3': datetime.now() + timedelta(seconds=3603),
-        '4': datetime.now() + timedelta(seconds=7203)
-    }
-
+    winsound.PlaySound('click.wav', winsound.SND_ASYNC)
+    root.wm_state('iconic')
     if option == 1:
-        winsound.PlaySound('click.wav', winsound.SND_ASYNC)
-        while datetime.now() < seconds_dictionary_boundary_1['1'] and datetime.now() < seconds_dictionary_boundary_2['1']:
-            root.wm_state('iconic')
-        winsound.PlaySound('ding-sound-effect_2.wav', winsound.SND_ASYNC)
-        root.wm_state('normal')
+        # schedule the on_alarm function to run in 15 minutes
+        # after method needs that converted to milliseconds,
+        # therefore 15 minutes * 60 seconds per minute * 1000 milliseconds per second
+        root.after(15*60*1_000, on_alarm)
     elif option == 2:
-        winsound.PlaySound('click.wav', winsound.SND_ASYNC)
-        while datetime.now() < seconds_dictionary_boundary_1['2'] and datetime.now() < seconds_dictionary_boundary_2[
-            '2']:
-            root.wm_state('iconic')
-        winsound.PlaySound('ding-sound-effect_2.wav', winsound.SND_ASYNC)
-        root.wm_state('normal')
+        root.after(30*60*1_000, on_alarm)
     elif option == 3:
-        winsound.PlaySound('click.wav', winsound.SND_ASYNC)
-        while datetime.now() < seconds_dictionary_boundary_1['3'] and datetime.now() < seconds_dictionary_boundary_2[
-            '3']:
-            root.wm_state('iconic')
-        winsound.PlaySound('ding-sound-effect_2.wav', winsound.SND_ASYNC)
-        root.wm_state('normal')
+        root.after(60*60*1_000, on_alarm)
     elif option == 4:
-        winsound.PlaySound('click.wav', winsound.SND_ASYNC)
-        while datetime.now() < seconds_dictionary_boundary_1['4'] and datetime.now() < seconds_dictionary_boundary_2[
-            '4']:
-            root.wm_state('iconic')
-        winsound.PlaySound('ding-sound-effect_2.wav', winsound.SND_ASYNC)
-        root.wm_state('normal')
+        root.after(120*60*1_000, on_alarm)
 
-# Added buttons to the canvas
+# Added buttons
 b1 = ttk.Button(root, text='15 Minutes', command=lambda: sleepfunc(1))
 b1.place(height=50, width=100, anchor=SE, relx=0.50, rely=0.65)
 b2 = ttk.Button(root, text='30 Minutes', command=lambda: sleepfunc(2))
@@ -92,7 +53,7 @@ b3.place(height=50, width=100, anchor=SE, relx=0.50, rely=0.85)
 b4 = ttk.Button(root, text='2 hours', command=lambda: sleepfunc(4))
 b4.place(height=50, width=100, anchor=SE, relx=0.84, rely=0.85)
 
-# Prevent the canvas from being resizeable
+# Prevent the window from being resizeable
 root.resizable(False, False)
 
 root.mainloop()
